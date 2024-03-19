@@ -4,7 +4,8 @@
 
     <h1 class="text-4xl font-bold text-center my-10">INFORMACIÓN IMPORTANTE!!!</h1>
     
-    <div>
+    <div class="flex flex-col">
+        <h2 class=" mx-auto  text-2xl font-semibold">Fecha: Marzo 19 de 2024</h2>
         <h2 class="p-10 text-2xl font-semibold">Atn: Señores Propietarios Edificio Mirador de Altavista.</h2>
     </div>
 
