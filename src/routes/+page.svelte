@@ -20,7 +20,7 @@
         Frente a cualquier duda se anexa la información expresada por la Ley:
     </p>
 
-    <a class="w-11/12 mx-auto text-blue-600" href="http://www.secretariasenado.gov.co/senado/basedoc/ley_0675_2001_pr001.html#39" target="_blank" rel="noopener">Haz click aquí para ver el articulo <span class="text-red-600">39</span> de la ley 675</a>
-    <a class="w-11/12 mx-auto text-blue-600" href="http://www.secretariasenado.gov.co/senado/basedoc/ley_0675_2001_pr001.html#39" target="_blank" rel="noopener">Haz click aquí para ver el articulo <span class="text-red-600">40</span> de la ley 675</a>
+    <a class="w-11/12 mx-auto text-blue-600 p-5" href="http://www.secretariasenado.gov.co/senado/basedoc/ley_0675_2001_pr001.html#39" target="_blank" rel="noopener">Haz click aquí para ver el articulo <span class="text-red-600">39</span> de la ley 675</a>
+    <a class="w-11/12 mx-auto text-blue-600 p-5" href="http://www.secretariasenado.gov.co/senado/basedoc/ley_0675_2001_pr001.html#39" target="_blank" rel="noopener">Haz click aquí para ver el articulo <span class="text-red-600">40</span> de la ley 675</a>
 
 </main>
