@@ -22,5 +22,9 @@
 
     <a class="w-11/12 mx-auto text-blue-600 p-5" href="http://www.secretariasenado.gov.co/senado/basedoc/ley_0675_2001_pr001.html#39" target="_blank" rel="noopener">Haz click aquí para ver el articulo <span class="text-red-600">39</span> de la ley 675</a>
     <a class="w-11/12 mx-auto text-blue-600 p-5" href="http://www.secretariasenado.gov.co/senado/basedoc/ley_0675_2001_pr001.html#39" target="_blank" rel="noopener">Haz click aquí para ver el articulo <span class="text-red-600">40</span> de la ley 675</a>
+    
+    <article class="flex w-3/4 mx-auto font-bold justify-center">
+        <p class=" font-bold">“Todos agradecemos la asistencia de todos. No olvide que Nuestro Edificio es nuestro patrimonio y representa la inversión de una parte importante de nuestros ahorros de toda la vida”</p>
+    </article>
 
 </main>
