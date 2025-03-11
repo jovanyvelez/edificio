@@ -31,7 +31,7 @@
 			<ul class="mt-2 ml-7 space-y-3">
 				<li>
 					<a
-						href="/"
+						href="/presupuesto"
 						class="group flex items-center text-blue-600 transition-colors duration-200 hover:text-indigo-700"
 					>
 						<span
