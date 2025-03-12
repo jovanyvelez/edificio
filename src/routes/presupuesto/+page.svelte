@@ -635,7 +635,7 @@
 	/>
 
 	<div class="table-container">
-		<table>
+		<table mx-1 md:mx-4>
 			<thead>
 				<tr>
 					<th on:click={() => ordenarPor('concepto')}>
@@ -727,7 +727,6 @@
 	table {
 		width: 100%;
 		border-collapse: collapse;
-		margin: 1rem 0;
 	}
 
 	th,
