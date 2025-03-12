@@ -23,7 +23,7 @@
 		<h3 class="text-lg font-bold">Hola!</h3>
 		<div class="flex flex-row">
 			<Constructing/>
-			<p class="py-4 text-center">Pendiente por Implementar</p>
+			<p class="py-4 text-center">Muy pronto estará disponible</p>
 		</div>
 		<div class="modal-action">
 			<form method="dialog">
