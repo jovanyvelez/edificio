@@ -1,0 +1,1122 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "6",
+  "dialect": "sqlite",
+  "tables": {
+    "categorias_transaccion": {
+      "name": "categorias_transaccion",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "nombre": {
+          "autoincrement": false,
+          "name": "nombre",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "autoincrement": false,
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "autoincrement": false,
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "activo": {
+          "default": 1,
+          "autoincrement": false,
+          "name": "activo",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "items_ppto": {
+      "name": "items_ppto",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "nombre": {
+          "autoincrement": false,
+          "name": "nombre",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_categoria": {
+          "autoincrement": false,
+          "name": "id_categoria",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "autoincrement": false,
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "activo": {
+          "default": 1,
+          "autoincrement": false,
+          "name": "activo",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "items_ppto_id_categoria_categorias_transaccion_id_fk": {
+          "name": "items_ppto_id_categoria_categorias_transaccion_id_fk",
+          "tableFrom": "items_ppto",
+          "tableTo": "categorias_transaccion",
+          "columnsFrom": [
+            "id_categoria"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "ppto": {
+      "name": "ppto",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "id_item": {
+          "autoincrement": false,
+          "name": "id_item",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ano": {
+          "autoincrement": false,
+          "name": "ano",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mes": {
+          "autoincrement": false,
+          "name": "mes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "valor": {
+          "autoincrement": false,
+          "name": "valor",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_creacion": {
+          "default": "(CURRENT_TIMESTAMP)",
+          "autoincrement": false,
+          "name": "fecha_creacion",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_modificacion": {
+          "autoincrement": false,
+          "name": "fecha_modificacion",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "idx_ppto_item_ano_mes": {
+          "name": "idx_ppto_item_ano_mes",
+          "columns": [
+            "id_item",
+            "ano",
+            "mes"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "ppto_id_item_items_ppto_id_fk": {
+          "name": "ppto_id_item_items_ppto_id_fk",
+          "tableFrom": "ppto",
+          "tableTo": "items_ppto",
+          "columnsFrom": [
+            "id_item"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "transacciones": {
+      "name": "transacciones",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "id_item": {
+          "autoincrement": false,
+          "name": "id_item",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ano": {
+          "autoincrement": false,
+          "name": "ano",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mes": {
+          "autoincrement": false,
+          "name": "mes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "autoincrement": false,
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "monto": {
+          "autoincrement": false,
+          "name": "monto",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_transaccion": {
+          "autoincrement": false,
+          "name": "fecha_transaccion",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "autoincrement": false,
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "comprobante": {
+          "autoincrement": false,
+          "name": "comprobante",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_usuario": {
+          "autoincrement": false,
+          "name": "id_usuario",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_apartamento": {
+          "autoincrement": false,
+          "name": "id_apartamento",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_registro": {
+          "default": "(CURRENT_TIMESTAMP)",
+          "autoincrement": false,
+          "name": "fecha_registro",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "idx_transacciones_tipo": {
+          "name": "idx_transacciones_tipo",
+          "columns": [
+            "tipo"
+          ],
+          "isUnique": false
+        },
+        "idx_transacciones_item_ano_mes": {
+          "name": "idx_transacciones_item_ano_mes",
+          "columns": [
+            "id_item",
+            "ano",
+            "mes"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "transacciones_id_apartamento_apartamentos_id_fk": {
+          "name": "transacciones_id_apartamento_apartamentos_id_fk",
+          "tableFrom": "transacciones",
+          "tableTo": "apartamentos",
+          "columnsFrom": [
+            "id_apartamento"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transacciones_id_usuario_usuarios_id_fk": {
+          "name": "transacciones_id_usuario_usuarios_id_fk",
+          "tableFrom": "transacciones",
+          "tableTo": "usuarios",
+          "columnsFrom": [
+            "id_usuario"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transacciones_id_item_items_ppto_id_fk": {
+          "name": "transacciones_id_item_items_ppto_id_fk",
+          "tableFrom": "transacciones",
+          "tableTo": "items_ppto",
+          "columnsFrom": [
+            "id_item"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "cuotas_administracion": {
+      "name": "cuotas_administracion",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "id_apartamento": {
+          "autoincrement": false,
+          "name": "id_apartamento",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_categoria": {
+          "autoincrement": false,
+          "name": "id_categoria",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "valor": {
+          "autoincrement": false,
+          "name": "valor",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_inicio": {
+          "autoincrement": false,
+          "name": "fecha_inicio",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_fin": {
+          "autoincrement": false,
+          "name": "fecha_fin",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_creacion": {
+          "default": "(CURRENT_TIMESTAMP)",
+          "autoincrement": false,
+          "name": "fecha_creacion",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_modificacion": {
+          "autoincrement": false,
+          "name": "fecha_modificacion",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "idx_cuotas_apartamento": {
+          "name": "idx_cuotas_apartamento",
+          "columns": [
+            "id_apartamento"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "cuotas_administracion_id_categoria_categorias_transaccion_id_fk": {
+          "name": "cuotas_administracion_id_categoria_categorias_transaccion_id_fk",
+          "tableFrom": "cuotas_administracion",
+          "tableTo": "categorias_transaccion",
+          "columnsFrom": [
+            "id_categoria"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "cuotas_administracion_id_apartamento_apartamentos_id_fk": {
+          "name": "cuotas_administracion_id_apartamento_apartamentos_id_fk",
+          "tableFrom": "cuotas_administracion",
+          "tableTo": "apartamentos",
+          "columnsFrom": [
+            "id_apartamento"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "pagos_cuotas": {
+      "name": "pagos_cuotas",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "id_cuota": {
+          "autoincrement": false,
+          "name": "id_cuota",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_transaccion": {
+          "autoincrement": false,
+          "name": "id_transaccion",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "monto_principal": {
+          "autoincrement": false,
+          "name": "monto_principal",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "monto_interes": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "monto_interes",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_pago": {
+          "autoincrement": false,
+          "name": "fecha_pago",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "metodo_pago": {
+          "autoincrement": false,
+          "name": "metodo_pago",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "comprobante": {
+          "autoincrement": false,
+          "name": "comprobante",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notas": {
+          "autoincrement": false,
+          "name": "notas",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "idx_pagos_cuota": {
+          "name": "idx_pagos_cuota",
+          "columns": [
+            "id_cuota"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "pagos_cuotas_id_transaccion_transacciones_id_fk": {
+          "name": "pagos_cuotas_id_transaccion_transacciones_id_fk",
+          "tableFrom": "pagos_cuotas",
+          "tableTo": "transacciones",
+          "columnsFrom": [
+            "id_transaccion"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pagos_cuotas_id_cuota_cuotas_administracion_id_fk": {
+          "name": "pagos_cuotas_id_cuota_cuotas_administracion_id_fk",
+          "tableFrom": "pagos_cuotas",
+          "tableTo": "cuotas_administracion",
+          "columnsFrom": [
+            "id_cuota"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "aprobaciones_exceso": {
+      "name": "aprobaciones_exceso",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "id_transaccion": {
+          "autoincrement": false,
+          "name": "id_transaccion",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_consejero": {
+          "autoincrement": false,
+          "name": "id_consejero",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_aprobacion": {
+          "default": "(CURRENT_TIMESTAMP)",
+          "autoincrement": false,
+          "name": "fecha_aprobacion",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "justificacion": {
+          "autoincrement": false,
+          "name": "justificacion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "documento_respaldo": {
+          "autoincrement": false,
+          "name": "documento_respaldo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "idx_aprobaciones_transaccion": {
+          "name": "idx_aprobaciones_transaccion",
+          "columns": [
+            "id_transaccion"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "aprobaciones_exceso_id_consejero_usuarios_id_fk": {
+          "name": "aprobaciones_exceso_id_consejero_usuarios_id_fk",
+          "tableFrom": "aprobaciones_exceso",
+          "tableTo": "usuarios",
+          "columnsFrom": [
+            "id_consejero"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "aprobaciones_exceso_id_transaccion_transacciones_id_fk": {
+          "name": "aprobaciones_exceso_id_transaccion_transacciones_id_fk",
+          "tableFrom": "aprobaciones_exceso",
+          "tableTo": "transacciones",
+          "columnsFrom": [
+            "id_transaccion"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "tipos_usuario": {
+      "name": "tipos_usuario",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "tipo": {
+          "autoincrement": false,
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "autoincrement": false,
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "usuarios": {
+      "name": "usuarios",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "nombre": {
+          "autoincrement": false,
+          "name": "nombre",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "apellido": {
+          "autoincrement": false,
+          "name": "apellido",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "autoincrement": false,
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "telefono": {
+          "autoincrement": false,
+          "name": "telefono",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "username": {
+          "autoincrement": false,
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "autoincrement": false,
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_tipo_usuario": {
+          "autoincrement": false,
+          "name": "id_tipo_usuario",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_registro": {
+          "default": "(CURRENT_TIMESTAMP)",
+          "autoincrement": false,
+          "name": "fecha_registro",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "activo": {
+          "default": 1,
+          "autoincrement": false,
+          "name": "activo",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "idx_usuarios_tipo": {
+          "name": "idx_usuarios_tipo",
+          "columns": [
+            "id_tipo_usuario"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "usuarios_id_tipo_usuario_tipos_usuario_id_fk": {
+          "name": "usuarios_id_tipo_usuario_tipos_usuario_id_fk",
+          "tableFrom": "usuarios",
+          "tableTo": "tipos_usuario",
+          "columnsFrom": [
+            "id_tipo_usuario"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "apartamentos": {
+      "name": "apartamentos",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "numero": {
+          "autoincrement": false,
+          "name": "numero",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "piso": {
+          "autoincrement": false,
+          "name": "piso",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "area": {
+          "autoincrement": false,
+          "name": "area",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_propietario": {
+          "autoincrement": false,
+          "name": "id_propietario",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "apartamentos_id_propietario_usuarios_id_fk": {
+          "name": "apartamentos_id_propietario_usuarios_id_fk",
+          "tableFrom": "apartamentos",
+          "tableTo": "usuarios",
+          "columnsFrom": [
+            "id_propietario"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "historial_cambios": {
+      "name": "historial_cambios",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "tabla": {
+          "autoincrement": false,
+          "name": "tabla",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_registro": {
+          "autoincrement": false,
+          "name": "id_registro",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accion": {
+          "autoincrement": false,
+          "name": "accion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_usuario": {
+          "autoincrement": false,
+          "name": "id_usuario",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha": {
+          "default": "(CURRENT_TIMESTAMP)",
+          "autoincrement": false,
+          "name": "fecha",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "detalles": {
+          "autoincrement": false,
+          "name": "detalles",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "historial_cambios_id_usuario_usuarios_id_fk": {
+          "name": "historial_cambios_id_usuario_usuarios_id_fk",
+          "tableFrom": "historial_cambios",
+          "tableTo": "usuarios",
+          "columnsFrom": [
+            "id_usuario"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    },
+    "tasas_interes": {
+      "name": "tasas_interes",
+      "columns": {
+        "id": {
+          "autoincrement": true,
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": false
+        },
+        "ano": {
+          "autoincrement": false,
+          "name": "ano",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mes": {
+          "autoincrement": false,
+          "name": "mes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tasa_mensual": {
+          "autoincrement": false,
+          "name": "tasa_mensual",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tasa_anual": {
+          "autoincrement": false,
+          "name": "tasa_anual",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "autoincrement": false,
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_registro": {
+          "default": "(CURRENT_TIMESTAMP)",
+          "autoincrement": false,
+          "name": "fecha_registro",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_usuario": {
+          "autoincrement": false,
+          "name": "id_usuario",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {
+        "idx_tasas_periodo": {
+          "name": "idx_tasas_periodo",
+          "columns": [
+            "ano",
+            "mes"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "tasas_interes_id_usuario_usuarios_id_fk": {
+          "name": "tasas_interes_id_usuario_usuarios_id_fk",
+          "tableFrom": "tasas_interes",
+          "tableTo": "usuarios",
+          "columnsFrom": [
+            "id_usuario"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "categorias_transaccion_check_1": {
+          "name": "categorias_transaccion_check_1",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        },
+        "transacciones_check_2": {
+          "name": "transacciones_check_2",
+          "value": "tipo IN ('INGRESO', 'GASTO'"
+        }
+      }
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
