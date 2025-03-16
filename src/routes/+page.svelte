@@ -68,13 +68,13 @@
 				</li>
 				<ul class="mt-2 ml-7 space-y-3">
 					<li>
-						<button
+						<a
+							href="/presupuesto"
 							class="btn btn-link text-blue-600 transition-colors duration-200 hover:text-indigo-700"
-							onclick={() => toggleModal()}
 							><span
 								class="mr-2 inline-block h-2 w-2 rounded-full bg-blue-500 group-hover:bg-indigo-600"
 							></span> Aprobado 2025
-						</button>
+					</a>
 					</li>
 					<li>
 						<button
