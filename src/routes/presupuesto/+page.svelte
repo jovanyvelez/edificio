@@ -1,6 +1,10 @@
 <script lang="ts">
-	import datos from '$lib/resources/Datatest';
+	//import datos from '$lib/resources/Datatest';
 	import { onMount } from 'svelte';
+
+  export let data;
+
+  const {datos} = data;
 
 	// Definición de tipos
 	interface DatoTabla {
@@ -9,10 +13,13 @@
 	  valor: number;
 	}
 	
+
 	interface ItemValores {
 	  [key: string]: (number | null)[];
 	}
 	
+
+
 	// Nombres de los meses para los encabezados
 	const meses: string[] = [
 	  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
@@ -126,6 +133,9 @@
 	  }).format(valor);
 	}
 </script>
+
+
+<h1 class="flex justify-center md: text-3xl font-bold">Presupuesto 2025</h1>
 
 <!-- Selector de meses para vista móvil -->
 {#if pantallaPequena}
