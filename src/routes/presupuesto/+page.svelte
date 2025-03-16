@@ -1,10 +1,10 @@
 <script lang="ts">
-	//import datos from '$lib/resources/Datatest';
+	import datos from '$lib/resources/Datatest';
 	import { onMount } from 'svelte';
 
-  export let data;
+  //export let data;
 
-  const {datos} = data;
+ // const {datos} = data;
 
 	// Definición de tipos
 	interface DatoTabla {
