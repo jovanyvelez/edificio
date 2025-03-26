@@ -84,6 +84,7 @@ CREATE TABLE `pagos_cuotas` (
 	`metodo_pago` text,
 	`comprobante` text,
 	`notas` text,
+	`pago_completo` numeric DEFAULT 1,
 	FOREIGN KEY (`id_transaccion`) REFERENCES `transacciones`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`id_cuota`) REFERENCES `cuotas_administracion`(`id`) ON UPDATE no action ON DELETE no action,
 	CONSTRAINT "categorias_transaccion_check_1" CHECK(tipo IN ('INGRESO', 'GASTO'),
@@ -168,5 +169,81 @@ CREATE TABLE `tasas_interes` (
 	CONSTRAINT "transacciones_check_2" CHECK(tipo IN ('INGRESO', 'GASTO')
 );
 --> statement-breakpoint
-CREATE INDEX `idx_tasas_periodo` ON `tasas_interes` (`ano`,`mes`);
+CREATE INDEX `idx_tasas_periodo` ON `tasas_interes` (`ano`,`mes`);--> statement-breakpoint
+CREATE TABLE `saldos_a_favor` (
+	`id` integer PRIMARY KEY AUTOINCREMENT,
+	`id_apartamento` integer NOT NULL,
+	`monto` real NOT NULL,
+	`fecha_registro` numeric NOT NULL,
+	`fecha_modificacion` numeric,
+	`activo` numeric DEFAULT 1,
+	`id_transaccion` integer,
+	FOREIGN KEY (`id_transaccion`) REFERENCES `transacciones`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`id_apartamento`) REFERENCES `apartamentos`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT "categorias_transaccion_check_1" CHECK(tipo IN ('INGRESO', 'GASTO'),
+	CONSTRAINT "transacciones_check_2" CHECK(tipo IN ('INGRESO', 'GASTO')
+);
+--> statement-breakpoint
+CREATE INDEX `idx_saldos_apartamento` ON `saldos_a_favor` (`id_apartamento`,`activo`);--> statement-breakpoint
+CREATE TABLE `cuotas_atrasadas` (
+	`id` integer PRIMARY KEY AUTOINCREMENT,
+	`id_apartamento` integer NOT NULL,
+	`id_cuota` integer NOT NULL,
+	`monto_original` real NOT NULL,
+	`saldo_pendiente` real NOT NULL,
+	`mes` integer NOT NULL,
+	`ano` integer NOT NULL,
+	`fecha_vencimiento` numeric NOT NULL,
+	`fecha_registro` numeric NOT NULL,
+	`fecha_modificacion` numeric,
+	`activo` numeric DEFAULT 1,
+	FOREIGN KEY (`id_cuota`) REFERENCES `cuotas_administracion`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`id_apartamento`) REFERENCES `apartamentos`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT "categorias_transaccion_check_1" CHECK(tipo IN ('INGRESO', 'GASTO'),
+	CONSTRAINT "transacciones_check_2" CHECK(tipo IN ('INGRESO', 'GASTO')
+);
+--> statement-breakpoint
+CREATE INDEX `idx_cuotas_atrasadas_fecha` ON `cuotas_atrasadas` (`fecha_vencimiento`);--> statement-breakpoint
+CREATE INDEX `idx_cuotas_atrasadas_apart` ON `cuotas_atrasadas` (`id_apartamento`,`activo`);--> statement-breakpoint
+CREATE TABLE `abonos_interes` (
+	`id` integer PRIMARY KEY AUTOINCREMENT,
+	`id_apartamento` integer NOT NULL,
+	`id_transaccion` integer NOT NULL,
+	`monto` real NOT NULL,
+	`fecha_registro` numeric NOT NULL,
+	`fecha_modificacion` numeric,
+	`activo` numeric DEFAULT 1,
+	FOREIGN KEY (`id_transaccion`) REFERENCES `transacciones`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`id_apartamento`) REFERENCES `apartamentos`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT "categorias_transaccion_check_1" CHECK(tipo IN ('INGRESO', 'GASTO'),
+	CONSTRAINT "transacciones_check_2" CHECK(tipo IN ('INGRESO', 'GASTO')
+);
+--> statement-breakpoint
+CREATE INDEX `idx_abonos_interes_apart` ON `abonos_interes` (`id_apartamento`,`activo`);--> statement-breakpoint
+CREATE TABLE `cierres_mensuales` (
+	`id` integer PRIMARY KEY AUTOINCREMENT,
+	`ano` integer NOT NULL,
+	`mes` integer NOT NULL,
+	`fecha_cierre` numeric DEFAULT (CURRENT_TIMESTAMP),
+	`id_usuario` integer NOT NULL,
+	`estado` text DEFAULT 'COMPLETADO',
+	`notas` text,
+	FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT "categorias_transaccion_check_1" CHECK(tipo IN ('INGRESO', 'GASTO'),
+	CONSTRAINT "transacciones_check_2" CHECK(tipo IN ('INGRESO', 'GASTO')
+);
+--> statement-breakpoint
+CREATE TABLE `detalles_cierre` (
+	`id` integer PRIMARY KEY AUTOINCREMENT,
+	`id_cierre` integer NOT NULL,
+	`id_apartamento` integer NOT NULL,
+	`accion` text NOT NULL,
+	`monto` real,
+	`detalle` text,
+	FOREIGN KEY (`id_apartamento`) REFERENCES `apartamentos`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`id_cierre`) REFERENCES `cierres_mensuales`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT "categorias_transaccion_check_1" CHECK(tipo IN ('INGRESO', 'GASTO'),
+	CONSTRAINT "transacciones_check_2" CHECK(tipo IN ('INGRESO', 'GASTO')
+);
+
 */

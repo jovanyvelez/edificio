@@ -8,7 +8,7 @@ CREATE TABLE categorias_transaccion (
 );
 
 -- Insertar categorías predefinidas
-INSERT INTO categorias_transaccion (id, nombre, tipo, descripcion) VALUES 
+INSERT INTO categorias_transaccion (id, nombre, tipo, descripcion) VALUES
 (1, 'Cuota de administración', 'INGRESO', 'Pagos mensuales de cuotas de administración'),
 (2, 'Intereses por mora', 'INGRESO', 'Intereses generados por pagos atrasados'),
 (3, 'Donaciones', 'INGRESO', 'Donaciones voluntarias de propietarios u otros'),
@@ -85,6 +85,7 @@ CREATE TABLE pagos_cuotas (
     metodo_pago TEXT,
     comprobante TEXT,
     notas TEXT,
+    pago_completo BOOLEAN DEFAULT 1,
     FOREIGN KEY (id_cuota) REFERENCES cuotas_administracion(id),
     FOREIGN KEY (id_transaccion) REFERENCES transacciones(id)
 );
@@ -109,7 +110,7 @@ CREATE TABLE tipos_usuario (
 );
 
 -- Datos iniciales para tipos de usuario
-INSERT INTO tipos_usuario (id, tipo, descripcion) VALUES 
+INSERT INTO tipos_usuario (id, tipo, descripcion) VALUES
 (1, 'Administrador', 'Administrador del edificio'),
 (2, 'Propietario', 'Propietario de departamento'),
 (3, 'Consejo', 'Miembro del consejo de administración');
@@ -164,7 +165,82 @@ CREATE TABLE tasas_interes (
     UNIQUE(ano, mes)
 );
 
--- Índice para búsquedas por período
+CREATE TABLE saldos_a_favor (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_apartamento INTEGER NOT NULL,
+    monto REAL NOT NULL,
+    fecha_registro DATE NOT NULL,
+    fecha_modificacion TIMESTAMP,
+    activo BOOLEAN DEFAULT 1,  -- Para saber si ya se utilizó el saldo
+    id_transaccion INTEGER,    -- Transacción que generó el saldo a favor
+    FOREIGN KEY (id_apartamento) REFERENCES apartamentos(id),
+    FOREIGN KEY (id_transaccion) REFERENCES transacciones(id)
+);
+
+-- Nueva tabla para cuotas atrasadas
+CREATE TABLE cuotas_atrasadas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_apartamento INTEGER NOT NULL,
+    id_cuota INTEGER NOT NULL,  -- Referencia a la cuota original
+    monto_original REAL NOT NULL,
+    saldo_pendiente REAL NOT NULL,  -- Monto que falta por pagar
+    mes INTEGER NOT NULL,
+    ano INTEGER NOT NULL,
+    fecha_vencimiento DATE NOT NULL,
+    fecha_registro DATE NOT NULL,
+    fecha_modificacion TIMESTAMP,
+    activo BOOLEAN DEFAULT 1,  -- Indica si la cuota atrasada sigue pendiente
+    FOREIGN KEY (id_apartamento) REFERENCES apartamentos(id),
+    FOREIGN KEY (id_cuota) REFERENCES cuotas_administracion(id)
+);
+
+-- tabla para abonos a intereses
+CREATE TABLE abonos_interes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_apartamento INTEGER NOT NULL,
+    id_transaccion INTEGER NOT NULL,
+    monto REAL NOT NULL,
+    fecha_registro DATE NOT NULL,
+    fecha_modificacion TIMESTAMP,
+    activo BOOLEAN DEFAULT 1,  -- Para saber si ya se ha aplicado
+    FOREIGN KEY (id_apartamento) REFERENCES apartamentos(id),
+    FOREIGN KEY (id_transaccion) REFERENCES transacciones(id)
+);
+
+CREATE TABLE abonos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_cuota_atrasada INTEGER NOT NULL,
+    id_transaccion INTEGER NOT NULL,
+    monto REAL NOT NULL,
+    fecha_abono DATE NOT NULL,
+    notas TEXT,
+    FOREIGN KEY (id_cuota_atrasada) REFERENCES cuotas_atrasadas(id),
+    FOREIGN KEY (id_transaccion) REFERENCES transacciones(id)
+);
+-- Tabla para registrar el cierre mensual
+CREATE TABLE cierres_mensuales (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ano INTEGER NOT NULL,
+    mes INTEGER NOT NULL,
+    fecha_cierre TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id_usuario INTEGER NOT NULL,
+    estado TEXT DEFAULT 'COMPLETADO',
+    notas TEXT,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
+    UNIQUE(ano, mes)
+);
+
+-- Tabla de control para detalles del proceso de cierre
+CREATE TABLE detalles_cierre (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_cierre INTEGER NOT NULL,
+    id_apartamento INTEGER NOT NULL,
+    accion TEXT NOT NULL, -- 'CUOTA_ATRASADA', 'SALDO_APLICADO', etc.
+    monto REAL,
+    detalle TEXT,
+    FOREIGN KEY (id_cierre) REFERENCES cierres_mensuales(id),
+    FOREIGN KEY (id_apartamento) REFERENCES apartamentos(id)
+);
 
 
 -- Índices para mejorar el rendimiento
@@ -176,3 +252,7 @@ CREATE INDEX idx_cuotas_apartamento ON cuotas_administracion (id_apartamento);
 CREATE INDEX idx_pagos_cuota ON pagos_cuotas(id_cuota);
 CREATE INDEX idx_aprobaciones_transaccion ON aprobaciones_exceso(id_transaccion);
 CREATE INDEX idx_tasas_periodo ON tasas_interes(ano, mes);
+CREATE INDEX idx_saldos_apartamento ON saldos_a_favor(id_apartamento, activo);
+CREATE INDEX idx_cuotas_atrasadas_apart ON cuotas_atrasadas(id_apartamento, activo);
+CREATE INDEX idx_cuotas_atrasadas_fecha ON cuotas_atrasadas(fecha_vencimiento);
+CREATE INDEX idx_abonos_interes_apart ON abonos_interes(id_apartamento, activo);
