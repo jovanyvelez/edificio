@@ -177,7 +177,8 @@ CREATE TABLE saldos_a_favor (
     FOREIGN KEY (id_transaccion) REFERENCES transacciones(id)
 );
 
--- Nueva tabla para cuotas atrasadas
+-- Tabla para cuotas atrasadas, cada cierre mensual se genera una cuota atrasada o pendiente para el siguiente,
+-- de cada apartamento
 CREATE TABLE cuotas_atrasadas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     id_apartamento INTEGER NOT NULL,

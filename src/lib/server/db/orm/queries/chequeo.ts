@@ -97,10 +97,10 @@ class ProcesadorPagos {
                         await this.procesarPagoConCuotasAtrasadas(tx, idApartamento, monto, cuotasAtrasadas, transaccionId, ano, mes);
                     } else {
                         // Escenario 5: Hay saldos a favor
-                        await this.registrarSaldoAFavor(tx, idApartamento, nuevoExcedente, idTransaccion);
+                        await this.registrarSaldoAFavor(tx, idApartamento, monto, transaccionId);
                     }
 
-                    tx.rollback();
+                    //tx.rollback();
 
                 },
                 {
