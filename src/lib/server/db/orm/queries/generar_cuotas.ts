@@ -14,11 +14,6 @@ import {
 
 type CuotaAdministracion = typeof cuotasAdministracion.$inferSelect;
 
-interface Apartamento {
-    id: number;
-    numero: string;
-}
-
 interface MesAno { mes: number; ano: number };
 
 class ServicioCuotasAdministracion {
@@ -55,7 +50,7 @@ class ServicioCuotasAdministracion {
                         eq(cuotasAtrasadas.ano, ano)
                     ))
                     .limit(1);
-                
+
                 const lastDay = (Temporal.PlainDate.from({ year: ano, month: mes, day: 1 })).daysInMonth;
                 const fechaVencimiento = (Temporal.PlainDate.from({year: ano, month: mes, day:lastDay})).toString()
                 // Si no existe, crear la cuota
@@ -80,7 +75,6 @@ class ServicioCuotasAdministracion {
 
     // Método para obtener todos los meses en un rango de fechas
 
-
     private obtenerMesesEnRango(fecha1: string, fecha2: string): MesAno[] {
         const meses: MesAno[] = [];
         let ahora = Temporal.PlainDate.from(fecha1);
@@ -90,7 +84,7 @@ class ServicioCuotasAdministracion {
         while (Temporal.PlainDate.compare(ahora, despues) <= 0) {
             meses.push({
                 mes: ahora.month,
-                ano: ahora.year 
+                ano: ahora.year
             });
 
             // Asignar el nuevo valor (Temporal es inmutable)
@@ -99,8 +93,6 @@ class ServicioCuotasAdministracion {
 
         return meses;
     }
-
-
 }
 
 // Clase gestora para orquestar el proceso

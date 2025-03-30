@@ -217,6 +217,7 @@ export const cuotasAtrasadas = sqliteTable("cuotas_atrasadas", {
 
 export const abonos = sqliteTable("abonos",{
 	id: integer().primaryKey({ autoIncrement: true }),
+	idApartamento: integer().notNull().references(()=>apartamentos.id),
 	idCuotaAtrasada: integer("id_cuota_atrasada").notNull().references(()=> cuotasAtrasadas.id),
 	idTransaccion: integer("id_transaccion").notNull().references(()=> transacciones.id),
 	monto: real().notNull(),

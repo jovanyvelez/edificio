@@ -44,6 +44,7 @@ export const transaccionesRelations = relations(transacciones, ({ one, many }) =
 
 export const apartamentosRelations = relations(apartamentos, ({ one, many }) => ({
 	transacciones: many(transacciones),
+	abonos: many(cuotasAtrasadas),
 	cuotasAdministracions: many(cuotasAdministracion),
 	usuario: one(usuarios, {
 		fields: [apartamentos.idPropietario],
@@ -145,7 +146,12 @@ export const cuotasAtrasadasRelations = relations(cuotasAtrasadas, ({ one, many 
 }));
 
 export const abonosACuotasRelations = relations(abonos, ({ one }) => ({
-	transaccion: one(transacciones, {
+  apartamento: one(apartamentos, {
+		fields: [abonos.idApartamento],
+		references: [apartamentos.id]
+	}),
+
+  transaccion: one(transacciones, {
 		fields: [abonos.idTransaccion],
 		references: [transacciones.id]
 	}),
