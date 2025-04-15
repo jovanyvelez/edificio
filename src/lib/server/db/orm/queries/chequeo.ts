@@ -1,5 +1,5 @@
 // Importar el módulo para manejar fechas
-import { Temporal, toTemporalInstant } from '@js-temporal/polyfill';
+import { Temporal } from '@js-temporal/polyfill';
 
 import {
 	cuotasAdministracion,
@@ -16,7 +16,6 @@ import { db as Database } from '$lib/server/db/index';
 import type { SQLiteTransaction } from 'drizzle-orm/sqlite-core';
 import type { ResultSet } from '@libsql/client';
 import { lte, gte, desc, and, eq, sql } from 'drizzle-orm';
-
 
 // Definir un tipo para las transacciones
 type Trans = SQLiteTransaction<'async', ResultSet, any, any>;
@@ -47,9 +46,8 @@ class ProcesadorPagos {
 	async intereses(idApartamento: number, fechaPago: string) {
 		try {
 			await this.db.transaction(async (tx) => {
-
 				const cuotasAtrasadas = await this.obtenerCuotasAtrasadas(tx, idApartamento);
-				const { total: totalIntereses, detallesPorCuota } = await this.calcularIntereses(
+				const totalIntereses = await this.calcularIntereses(
 					tx,
 					fechaPago,
 					cuotasAtrasadas
@@ -57,7 +55,6 @@ class ProcesadorPagos {
 				//console.log(detallesPorCuota);
 				console.log(totalIntereses);
 			});
-
 		} catch (e) {
 			console.log('hubo un pequeño error');
 			console.log(e);
@@ -96,6 +93,7 @@ class ProcesadorPagos {
 					const cuota = await this.obtenerCuotaVigente(tx, idApartamento, ano, mes);
 					console.log(cuota);
 					if (!cuota) {
+            console.log("No se pudo obtener la cuota");
 						tx.rollback();
 					}
 
@@ -181,6 +179,7 @@ class ProcesadorPagos {
 	): Promise<CuotaAdministracion> {
 		const yearMonth = Temporal.PlainYearMonth.from({ year: ano, month: mes });
 		const miFecha = yearMonth.toString() + '-' + yearMonth.daysInMonth.toString();
+    console.log(miFecha);
 		const cuota = await tx
 			.select()
 			.from(cuotasAdministracion)
@@ -228,8 +227,8 @@ class ProcesadorPagos {
 		tx: Trans,
 		fechaPago: string,
 		Atrasadas: CuotaAtrasada[]
-	): Promise<{ total: number; detallesPorCuota: Array<{ idCuota: number; interes: number }> }> {
-		const detallesPorCuota: Array<{ idCuota: number; interes: number }> = [];
+	): Promise< number> {
+		//const detallesPorCuota: Array<{ idCuota: number; interes: number }> = [];
 		let totalIntereses = 0;
 		let saldoAnterior = 0;
 
@@ -244,6 +243,56 @@ class ProcesadorPagos {
 			return undefined;
 		}).filter((cuota): cuota is CuotaAtrasada => cuota !== undefined);
 
+		const tasa = await this.db
+			.select()
+			.from(pagoInteres)
+			.where(eq(pagoInteres.activo, false))
+			.orderBy(desc(pagoInteres.fechaModificacion))
+			.limit(1);
+
+		if (tasa.length > 0) {
+			const fechaInicial: Temporal.PlainDate = Temporal.PlainDate.from(tasa[0].fechaModificacion ?? Temporal.Now.plainDateISO().toString());
+			//fechaInicial = fechaInicial.add({ months: 1 });
+			const inicio: number = fechaInicial.year * 100 + fechaInicial.month;
+			const pagadoInt = pagado.subtract({months:1})
+			const fin: number = pagadoInt.year * 100 + pagadoInt.month;
+			console.log('Inicio ', inicio, ' Fin ', fin);
+			const tasas = await this.db
+				.select()
+				.from(tasasInteres)
+				.where(sql`(${tasasInteres.ano} * 100 + ${tasasInteres.mes}) BETWEEN ${inicio} AND ${fin}`);
+
+			//console.log('A considarar para los intereses ', JSON.stringify(tasas, null, 2));
+
+			if (tasas.length > 0) {
+				//
+				const intereses = tasas.map((e) => {
+					const fechaLim = e.ano * 100 + e.mes;
+					const total = Atraso.reduce((acumulador, valorActual) => {
+						if (valorActual.ano * 100 + valorActual.mes <= fechaLim) {
+							return acumulador + valorActual.saldoPendiente;
+						}
+						return acumulador;
+					}, 0);
+					const ano = e.ano
+					const mes = e.mes;
+          const suma1 = ano * 100 + mes;
+					/*const condicion: boolean =
+						!(tasa[0].idApartamento === 16) || ano < 2022 || (ano > 2023 && ano === 2024 && mes > 6);*/
+					const condicion = !((tasa[0].idApartamento === 16) && (suma1>202112 && suma1<202407))
+					if(condicion)
+					 return { tot: total, tasa: e.tasaMensual, totInt: total * (e.tasaMensual / 100), ano, mes };
+					else {
+					 return { tot: total, tasa: 0, totInt: 0, ano, mes };
+					}
+				});
+				console.log("Lo que hay que sumar: ", intereses)
+				return Math.trunc(intereses.reduce((ac:number, e)=>{
+          return ac + e.totInt;
+				}, 0))
+			}
+		}
+
 		for (const cuota of Atraso) {
 			// Obtener la tasa de interés para el periodo de la cuota
 			let tasaMes = 0;
@@ -251,7 +300,8 @@ class ProcesadorPagos {
 			//Que no se cobren Interes al apto 16 (-402-) en el 2023, 2022 y los meses 1,2,3,4,5 del 2024
 			const ano = Temporal.PlainDate.from(cuota.fechaVencimiento).year;
 			const mes = Temporal.PlainDate.from(cuota.fechaVencimiento).month;
-			const condicion: boolean = !(cuota.idApartamento === 16) || (ano < 2022 || (ano > 2023 && (ano === 2024 && mes > 6)));
+			const condicion: boolean =
+				!(cuota.idApartamento === 16) || ano < 2022 || (ano > 2023 && ano === 2024 && mes > 6);
 
 			if (condicion) {
 				const tasa = await tx
@@ -266,15 +316,13 @@ class ProcesadorPagos {
 
 			//interesCuota = (cuota.saldoPendiente) * tasaMes;
 
-
 			const interes = (saldoAnterior + cuota.saldoPendiente) * tasaMes;
 
 			saldoAnterior += cuota.saldoPendiente + interes;
 			totalIntereses += interes;
-			detallesPorCuota.push({ idCuota: cuota.id, interes });
-
+			//detallesPorCuota.push({ idCuota: cuota.id, interes });
 		}
-		return { total: Math.trunc(totalIntereses), detallesPorCuota };
+		return Math.trunc(totalIntereses);
 	}
 
 	/**
@@ -285,6 +333,7 @@ class ProcesadorPagos {
 		idApartamento: number,
 		monto: number,
 		idTransaccion: number,
+		fechaPago: string,
 		cerrar: boolean
 	): Promise<number> {
 		const result = await tx
@@ -294,7 +343,8 @@ class ProcesadorPagos {
 				idTransaccion,
 				monto,
 				activo: cerrar,
-				fechaRegistro: Temporal.Now.plainDateISO().toString()
+				fechaRegistro: Temporal.Now.plainDateISO().toString(),
+				fechaModificacion: fechaPago
 			})
 			.returning();
 		return result[0].id || 0;
@@ -349,7 +399,7 @@ class ProcesadorPagos {
 
 		if (montoDisponible <= 0) return;
 
-		console.log("Monto a abonar a cuotas ", montoDisponible);
+		console.log('Monto a abonar a cuotas ', montoDisponible);
 
 		for (const cuota of Atrasadas) {
 			if (montoDisponible <= 0) return;
@@ -399,7 +449,7 @@ class ProcesadorPagos {
 		fechaPago: string
 	): Promise<void> {
 		// Calcular intereses
-		const { total: totalIntereses, detallesPorCuota } = await this.calcularIntereses(
+		const totalIntereses = await this.calcularIntereses(
 			tx,
 			fechaPago,
 			cuotasAtrasadas
@@ -421,17 +471,23 @@ class ProcesadorPagos {
 		console.log('Intereses pendientes', interesesPendientes);
 		console.log('Mont', monto);
 
-		let cerrar = true;
+		const activo = true;
 		if (monto <= interesesPendientes) {
 			// Escenario 6.1: El pago es menor o igual que los intereses pendientes
-			cerrar = false;
-			await this.registrarAbonoInteres(tx, idApartamento, monto, idTransaccion, cerrar);
+			await this.registrarAbonoInteres(tx, idApartamento, monto, idTransaccion, fechaPago, activo);
 		} else {
 			// Escenario 6.2: El pago es mayor que los intereses pendientes
 			// Registrar abono a intereses por el valor pendiente
 			if (interesesPendientes > 0) {
 				//Se registra el pago de los intereses y se cierran para que no se contabilicen en la proxima cuota
-				await this.registrarAbonoInteres(tx, idApartamento, interesesPendientes, idTransaccion, cerrar);
+				await this.registrarAbonoInteres(
+					tx,
+					idApartamento,
+					interesesPendientes,
+					idTransaccion,
+					fechaPago,
+					!activo
+				);
 			}
 
 			console.log('Ya abonamos el interes');

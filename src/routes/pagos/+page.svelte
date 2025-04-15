@@ -1,18 +1,18 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { superForm } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
+	//import SuperDebug from 'sveltekit-superforms';
 
 	let data: PageProps = $props();
 
 	const { apartamentos, ingresos } = data.data;
 	const { form } = superForm(data.data.form);
 
-	let selected = $state();
+	//let selected = $state();
 
 </script>
 
-<h1 class="text-center text-2xl font-bold">Opción de pagos</h1>
+<h1 class="text-center text-2xl font-bold mb-15">Opción de pagos</h1>
 
 <main class="mx-5  flex flex-col items-center">
 
@@ -47,4 +47,4 @@
 
 </main>
 
-<SuperDebug data={$form} />
+<!--SuperDebug data={$form} /-->
