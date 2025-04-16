@@ -1,6 +1,7 @@
 import { db as dataBase } from '$lib/server/db/index';
-import { apartamentos, itemsPpto, categoriasTransaccion } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { apartamentos, itemsPpto, categoriasTransaccion, ppto } from '$lib/server/db/schema';
+import { eq, sql, and } from 'drizzle-orm';
+import { Temporal } from '@js-temporal/polyfill';
 
 //tipos para tipado estricto
 
@@ -30,6 +31,20 @@ class consultas_tablas {
       return apto.numero
     });
     return apartmentsName;
+	}
+
+  async nombreItems(): Promise<{id:number, nombre:string}[]>{
+
+				const ano = Temporal.Now.plainDateISO().year;
+				const items = await this.db
+						.selectDistinct({ id: itemsPpto.id, nombre: itemsPpto.nombre })
+						.from(itemsPpto)
+						.innerJoin(ppto, eq(itemsPpto.id, ppto.idItem))
+						.innerJoin(categoriasTransaccion, eq(itemsPpto.idCategoria, categoriasTransaccion.id))
+						.where(and(eq(ppto.ano, ano), eq(categoriasTransaccion.tipo, "GASTO")))
+						.orderBy(sql`${itemsPpto.nombre}`);
+
+				return items;
 	}
 
 	async getIngresos(): Promise<Ingresos[]> {
