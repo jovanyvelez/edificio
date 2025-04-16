@@ -1,12 +1,10 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { superForm } from 'sveltekit-superforms';
-	import SuperDebug from 'sveltekit-superforms';
+	//import SuperDebug from 'sveltekit-superforms';
 
 	let data: PageProps = $props();
-
 	const { items } = data.data;
-
 	const { form } = superForm(data.data.form);
 
 	//let selected = $state();
@@ -16,8 +14,8 @@
 
 <main class="mx-5 flex flex-col items-center">
 	<form method="POST" class="mx-1 flex w-full flex-col rounded-lg border p-5 md:mx-20 lg:w-1/3">
+		<input type="hidden" value={$form.tipo} />
 		<label for="item" class="label mx-2">Gasto</label>
-
 		<select bind:value={$form.item} id="item" class="select" name="item">
 			<option disabled selected>Seleccione una opcion del ppto</option>
 			{#each items as item (item.id)}
@@ -61,4 +59,4 @@
 	</form>
 </main>
 
-<SuperDebug data={$form} />
+<!--SuperDebug data={$form} /-->
