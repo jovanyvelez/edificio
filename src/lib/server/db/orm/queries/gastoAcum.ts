@@ -3,17 +3,24 @@ import { db } from '$lib/server/db/index';
 import { eq, and, between, sum, sql } from 'drizzle-orm';
 import { itemsPpto, ppto, transacciones } from '$lib/server/db/schema';
 
-export async function result() {
+export async function result(): Promise<{
+	id: number;
+	item: string;
+	presupuestoAcumulado: number;
+	gastoAcumulado: number;
+	diferencia: number;
+	porcentaje: number;
+}[]> {
 
 	const fecha = Temporal.Now.plainDateISO();
 	const año = fecha.year;
 	const mesInicio = 1;
 	const mesFin = fecha.month;
 
-	
+
 
 	// 1. Primero crear subconsultas equivalentes a los CTEs
-	const presupuestoAcumuladoSubquery =  db
+	const presupuestoAcumuladoSubquery = db
 		.select({
 			idItem: ppto.idItem,
 			valorAcumulado: sum(ppto.valor).as('valor_acumulado')
@@ -26,7 +33,7 @@ export async function result() {
 	const gastosAcumuladosSubquery = db
 		.select({
 			idItem: transacciones.idItem,
-			gastoAcumulado: sum(transacciones.monto).as('gasto_acumulado')	
+			gastoAcumulado: sum(transacciones.monto).as('gasto_acumulado')
 		})
 		.from(transacciones)
 		.where(
@@ -50,7 +57,7 @@ export async function result() {
 			item: itemsPpto.nombre,
 			presupuestoAcumulado: sql<number>`${presupuestoAcumuladoSubquery.valorAcumulado}`,
 			gastoAcumulado: miVar,
-			diferencia:  	otraVar,
+			diferencia: otraVar,
 			porcentaje: sql`${miVar} / ${presupuestoAcumuladoSubquery.valorAcumulado} * 100`
 		})
 		.from(presupuestoAcumuladoSubquery)
@@ -61,5 +68,5 @@ export async function result() {
 		)
 		.orderBy(itemsPpto.nombre);
 
-	console.log(ans);
+	return ans;
 }
