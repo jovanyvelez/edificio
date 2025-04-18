@@ -16,5 +16,7 @@ export async function getFullPresupuesto(ano: number) {
     .where(eq(ppto.ano, ano))
     .orderBy(asc(ppto.mes), asc(itemsPpto.nombre));
 
+
+
     return presupuestos;
 }

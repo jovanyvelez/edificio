@@ -1,10 +1,105 @@
-Pendientes:
+Tengo tres tablas: items_ppto, ppto y transacciones.
+En la tabla ppto tengo los diferentes items que hacen parte del presupuesto de gastos.
+En la tabla ppto tengo el valor presupuestado para un año y mes particular de diferentes items.
+Por último, en la tabla transacciones tengo los gastos realizados en un año y mes particular de diferentes items, tanto del tipo de gasto como del tipo de pago.
 
-1. Editar pagos en caso de error de digitación.
-2. Diseño de ventana para ingreso de presupuesto.
+Dadas estas tablas, podemos realizar las siguientes consultas:
+1. Obtener el valor presupuestado para un año y mes particular de diferentes items.
+2. Obtener los gastos realizados en un año y mes particular de diferentes items, del tipo 'GASTO'.'.
+4. Calcular el porcentaje de gastos realizados sobre el presupuesto para un año y mes particular de diferentes items.
+5. Obtener un comparativo entre el valor presupuestado y los gastos realizados para un año y mes particular de diferentes items.
+6. Calcular el porcentaje de gastos acumulados sobre el presupuesto acumulado para un rango de fechas, sobre diferentes items.
+7.Obtener un comparativo entre el valor presupuestado acumulado y los gastos acumulados para un rango de fechas, sobre diferentes items.
+8. También te proporciono el esquema de tablas construido para mapear las tablas en drizzle orm. Es posible que las consultas anteriores sean reescritas usando drizzle orm?.
 
-3. Diseño de ventana para ingreso de presupuesto.
+La estructuras de las tablas es la siguiente (Todas estan pobladas con datos:
+
+CREATE TABLE `items_ppto` (
+	`id` integer PRIMARY KEY,
+	`nombre` text NOT NULL,
+	`id_categoria` integer NOT NULL,
+	`descripcion` text,
+	`activo` numeric DEFAULT 1,
+	FOREIGN KEY (`id_categoria`) REFERENCES `categorias_transaccion`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT "categorias_transaccion_check_1" CHECK(tipo IN ('INGRESO', 'GASTO'),
+);
+--> statement-breakpoint
+CREATE TABLE `ppto` (
+	`id` integer PRIMARY KEY AUTOINCREMENT,
+	`id_item` integer NOT NULL,
+	`ano` integer NOT NULL,
+	`mes` integer NOT NULL,
+	`valor` real NOT NULL,
+	`fecha_creacion` numeric DEFAULT (CURRENT_TIMESTAMP),
+	`fecha_modificacion` numeric,
+	FOREIGN KEY (`id_item`) REFERENCES `items_ppto`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT "categorias_transaccion_check_1" CHECK(tipo IN ('INGRESO', 'GASTO'),
+);
+
+CREATE INDEX `idx_ppto_item_ano_mes` ON `ppto` (`id_item`,`ano`,`mes`);--> statement-breakpoint
+
+CREATE TABLE `transacciones` (
+	`id` integer PRIMARY KEY AUTOINCREMENT,
+	`id_item` integer NOT NULL,
+	`ano` integer NOT NULL,
+	`mes` integer NOT NULL,
+	`tipo` text NOT NULL,
+	`monto` real NOT NULL,
+	`fecha_transaccion` numeric NOT NULL,
+	`descripcion` text,
+	`comprobante` text,
+	`id_usuario` integer NOT NULL,
+	`id_apartamento` integer,
+	`fecha_registro` numeric DEFAULT (CURRENT_TIMESTAMP),
+	FOREIGN KEY (`id_apartamento`) REFERENCES `apartamentos`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`id_usuario`) REFERENCES `usuarios`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`id_item`) REFERENCES `items_ppto`(`id`) ON UPDATE no action ON DELETE no action,
+	CONSTRAINT "categorias_transaccion_check_1" CHECK(tipo IN ('INGRESO', 'GASTO'),
+);
 
 
+Eschema de tablas drizzle:
 
-Para consultar los items de presupuesto
+xport const itemsPpto = sqliteTable("items_ppto", {
+	id: integer().primaryKey(),
+	nombre: text().notNull(),
+	idCategoria: integer("id_categoria").notNull(),
+	descripcion: text(),
+	activo: numeric().default(sql`1`),
+});
+
+export const ppto = sqliteTable("ppto", {
+	id: integer().primaryKey({ autoIncrement: true }),
+	idItem: integer("id_item").notNull().references(() => itemsPpto.id),
+	ano: integer().notNull(),
+	mes: integer().notNull(),
+	valor: real().notNull(),
+	fechaCreacion: numeric("fecha_creacion").default(sql`(CURRENT_TIMESTAMP)`),
+	fechaModificacion: numeric("fecha_modificacion"),
+},
+(table) => [
+	index("idx_ppto_item_ano_mes").on(table.idItem, table.ano, table.mes),
+	check("categorias_transaccion_check_1", sql`tipo IN ('INGRESO', 'GASTO'`),
+	check("transacciones_check_2", sql`tipo IN ('INGRESO', 'GASTO'`),
+]);
+
+export const transacciones = sqliteTable("transacciones", {
+	id: integer().primaryKey({ autoIncrement: true }),
+	idItem: integer("id_item").notNull().references(() => itemsPpto.id),
+	ano: integer().notNull(),
+	mes: integer().notNull(),
+	tipo: text().notNull(),
+	monto: real().notNull(),
+	fechaTransaccion: numeric("fecha_transaccion").notNull(),
+	descripcion: text(),
+	comprobante: text(),
+	idUsuario: integer("id_usuario").notNull().references(() => usuarios.id),
+	idApartamento: integer("id_apartamento").references(() => apartamentos.id),
+	fechaRegistro: numeric("fecha_registro").default(sql`(CURRENT_TIMESTAMP)`),
+},
+(table) => [
+	index("idx_transacciones_tipo").on(table.tipo),
+	index("idx_transacciones_item_ano_mes").on(table.idItem, table.ano, table.mes),
+	check("categorias_transaccion_check_1", sql`tipo IN ('INGRESO', 'GASTO'`),
+	check("transacciones_check_2", sql`tipo IN ('INGRESO', 'GASTO'`),
+]);

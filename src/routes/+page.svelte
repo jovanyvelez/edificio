@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Constructing from "$lib/icons/Constructing.svelte";
+	import Constructing from '$lib/icons/Constructing.svelte';
 	let showModal = $state(false);
 	let dialog: HTMLDialogElement;
 
@@ -17,12 +17,11 @@
 	});
 </script>
 
-
 <dialog id="my_modal_1" class="modal" bind:this={dialog}>
 	<div class="modal-box">
 		<h3 class="text-lg font-bold">Hola!</h3>
 		<div class="flex flex-row">
-			<Constructing/>
+			<Constructing />
 			<p class="py-4 text-center">Muy pronto estará disponible</p>
 		</div>
 		<div class="modal-action">
@@ -33,7 +32,6 @@
 		</div>
 	</div>
 </dialog>
-
 
 <main>
 	<div class="mx-4 my-8 grid grid-cols-1 gap-8 md:grid-cols-[30%_70%]">
@@ -74,16 +72,16 @@
 							><span
 								class="mr-2 inline-block h-2 w-2 rounded-full bg-blue-500 group-hover:bg-indigo-600"
 							></span> Aprobado 2025
-					</a>
+						</a>
 					</li>
 					<li>
-						<button
+						<a
+							href="/pptoAcum"
 							class="btn btn-link text-blue-600 transition-colors duration-200 hover:text-indigo-700"
-							onclick={() => toggleModal()}
 							><span
 								class="mr-2 inline-block h-2 w-2 rounded-full bg-blue-500 group-hover:bg-indigo-600"
 							></span> Aprobado vs Ejecutado
-						</button>
+						</a>
 					</li>
 				</ul>
 				<li class="mt-4 font-medium text-indigo-700">
