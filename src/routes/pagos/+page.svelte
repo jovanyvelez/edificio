@@ -35,7 +35,6 @@
 			type="date"
 			bind:value={$form.fechaPago}
 			name="fechaPago"
-			class="input input-primary"
 			id="fecha"
 		/>
 
@@ -44,7 +43,6 @@
 			type="text"
 			bind:value={$form.referencia}
 			name="referencia"
-			class="input input-primary"
 			id="comprobante"
 		/>
 

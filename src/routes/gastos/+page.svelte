@@ -10,13 +10,13 @@
 	//let selected = $state();
 </script>
 
-<h1 class="mb-15 text-center text-2xl font-bold">Opción de Egresos</h1>
+<h1>Opción de Egresos</h1>
 
-<main class="mx-5 flex flex-col items-center">
-	<form method="POST" class="mx-1 flex w-full flex-col rounded-lg border p-5 md:mx-20 lg:w-1/3">
+<main>
+	<form method="POST">
 		<input type="hidden" value={$form.tipo} />
-		<label for="item" class="label mx-2">Gasto</label>
-		<select bind:value={$form.item} id="item" class="select" name="item">
+		<label for="item">Gasto</label>
+		<select bind:value={$form.item} id="item" name="item">
 			<option disabled selected>Seleccione una opcion del ppto</option>
 			{#each items as item (item.id)}
 				<option value={item.id}>
@@ -25,38 +25,86 @@
 			{/each}
 		</select>
 
-		<label for="monto" class="label mx-2 mt-2">Valor del pago</label>
+		<label for="monto">Valor del pago</label>
 		<input
 			type="number"
 			bind:value={$form.monto}
-			class="input input-primary"
 			id="monto"
 			name="monto"
 		/>
 
-		<label for="fecha" class="label mx-2 mt-2">Fecha del pago</label>
+		<label for="fecha">Fecha del pago</label>
 		<input
 			type="date"
 			bind:value={$form.fechaPago}
 			name="fechaPago"
-			class="input input-primary"
 			id="fecha"
 		/>
 
-		<label for="comprobante" class="label mx-2 mt-2">Referencia o # de comprobante</label>
+		<label for="comprobante" >Referencia o # de comprobante</label>
 		<input
 			type="text"
 			bind:value={$form.referencia}
 			name="referencia"
-			class="input input-primary"
 			id="comprobante"
 		/>
 
-		<label for="notas" class="label mx-2 mt-2">Observaciones</label>
-		<textarea bind:value={$form.notas} id="notas" name="notas" class="textarea"></textarea>
+		<label for="notas">Observaciones</label>
+		<textarea bind:value={$form.notas} id="notas" name="notas"></textarea>
 
-		<button type="submit" class="btn btn-primary my-2">Enviar</button>
+		<button type="submit">Enviar</button>
 	</form>
 </main>
 
 <!--SuperDebug data={$form} /-->
+<style>
+	@reference "tailwindcss";
+	
+	h1 {
+	  @apply mb-6 text-center text-xl font-bold text-gray-800 sm:text-2xl md:mb-8;
+	}
+	
+	main {
+	  @apply mx-auto w-full  py-4 sm:px-6 sm:py-6 lg:px-8;
+	}
+	
+	form {
+	  @apply mx-auto w-[90%] max-w-sm rounded-lg border border-gray-200 bg-white p-4 shadow-md 
+			 sm:w-full sm:rounded-xl sm:p-5 md:max-w-lg md:p-6;
+	}
+	
+	label {
+	  @apply mb-1 block text-base font-medium text-gray-700 sm:text-sm md:text-base;
+	}
+	
+	input, select {
+	  @apply w-full rounded-md border border-gray-300 px-3 py-2 text-base shadow-sm box-border transition-colors
+			 sm:py-2.5 md:text-lg
+			 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:ring-offset-0;
+	}
+	
+	select {
+	  @apply bg-white pr-8 cursor-pointer sm:pr-10;
+	}
+	
+	input[type="date"] {
+	  @apply appearance-none;
+	}
+	
+	textarea {
+	  @apply w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm box-border text-base min-h-[100px] resize-y text-gray-700
+			 md:text-lg md:min-h-[120px]
+			 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:ring-offset-0;
+	}
+	
+	button {
+	  @apply mt-6 w-full rounded-md bg-blue-600 py-2.5 px-4 text-white font-semibold text-base shadow-sm 
+			 sm:mt-8 md:py-3 md:text-lg
+			 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all
+			 active:bg-blue-800 active:transform active:translate-y-px;
+	}
+	
+	form > *:not(:first-child) {
+	  @apply mt-4 sm:mt-5;
+	}
+  </style>
