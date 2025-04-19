@@ -1,7 +1,7 @@
 # <span style="color:red; font-size:24px">COMUNICADO A LOS PROPIETARIOS – URGENTE: SISTEMA DE PRESIÓN DE AGUA DEL EDIFICIO</span>
 <br>
 
-**Marzo 11 de 2025**
+**Abril 19 de 2025**
 
 **Estimados Propietarios:**
 
@@ -32,7 +32,7 @@ Queremos asegurarles que hemos agotado todas las instancias posibles para minimi
 
 ## Próximos Pasos:
 
-Convocaremos a una asamblea extraordinaria a la brevedad (indicar fecha y hora tentativa) para discutir en detalle esta situación, analizar las opciones y tomar una decisión conjunta. Es fundamental contar con su participación y comprensión para encontrar la mejor solución posible.
+Vamos a esperar hasta el próximo 15 de mayo, para asegurar los recursos de compra del tanque de presión de agua y de esta manera tratar de no solicitar una cuota adicional a fin de subsanar el problema
 
 Agradecemos de antemano su comprensión y colaboración.
 
