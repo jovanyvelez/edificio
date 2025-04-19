@@ -72,7 +72,6 @@
 		<div class="comunica">
 			<Comunicado />
 		</div>
-
 	</div>
 </main>
 
@@ -87,7 +86,6 @@
 	}
 	a {
 		text-decoration: none;
-
 	}
 	.main_div {
 		@apply mx-4 my-8 grid grid-cols-1 gap-8 md:grid-cols-[30%_70%];
@@ -102,7 +100,7 @@
 	}
 
 	.main_ul_aside {
-		@apply space-y-5 list-image-none list-none;
+		@apply list-none list-image-none space-y-5;
 	}
 
 	.main_li_title {
@@ -110,15 +108,15 @@
 	}
 
 	.main_li_subtitle {
-		@apply text-blue-600 text-xl transition-colors duration-200 hover:text-indigo-700 list-none;
+		@apply list-none text-xl text-blue-600 transition-colors duration-200 hover:text-indigo-700;
 	}
 
 	.main_li_items {
-		@apply mr-2 inline-block h-2 w-2 rounded-full bg-blue-500 group-hover:bg-indigo-600 list-none;
+		@apply mr-2 inline-block h-2 w-2 list-none rounded-full bg-blue-500 group-hover:bg-indigo-600;
 	}
 
 	.main_icons {
-		@apply flex items-center  ;
+		@apply flex items-center;
 	}
 
 	.main_titles {
@@ -130,6 +128,6 @@
 	}
 
 	.format_icons {
-		@apply mr-2 h-5 w-5 text-indigo-500 ;
+		@apply mr-2 h-5 w-5 text-indigo-500;
 	}
 </style>

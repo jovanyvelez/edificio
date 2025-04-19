@@ -59,11 +59,15 @@
 
 
 <script lang="ts">
-	import type { PageProps } from '../pruebas/$types';
+
+
+	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 
-	const paymentsData = [
+	const { paymentsData} = data;
+
+	const paymentsData1 = [
 		{
 			apartamento: '9801',
 			total: 232000,

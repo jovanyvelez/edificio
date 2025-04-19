@@ -9,7 +9,7 @@
     @reference "tailwindcss";
 
     h1 {
-        @apply flex sm:mx-1 justify-center text-center text-3xl mt-10 font-bold;
+        @apply flex sm:mx-1 justify-center text-center text-5xl mt-10 font-bold;
     }
 
 </style>

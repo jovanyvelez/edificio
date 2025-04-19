@@ -26,7 +26,7 @@ export const load = async () => {
     as('intereses');
 
 
-  const ans = await db
+  const paymentsData = await db
     .select({
       apartamento: apartamentos.numero,
       total: sql`coalesce(${pagos.total}, 0) + coalesce(${intereses.total}, 0)`,
@@ -37,9 +37,8 @@ export const load = async () => {
     leftJoin(intereses, eq(apartamentos.id, intereses.id))
 
 
-  console.log(ans);
 
-  return {}
+  return {paymentsData}
 
 
   // const gestorCuotas = new GestorCuotasPendientes();
