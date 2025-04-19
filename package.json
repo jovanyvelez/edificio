@@ -20,7 +20,6 @@
 		"@sveltejs/kit": "^2.20.7",
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@tailwindcss/vite": "^4.1.4",
-		"daisyui": "^5.0.25",
 		"drizzle-kit": "^0.30.6",
 		"eslint": "^9.24.0",
 		"eslint-config-prettier": "^10.1.2",
@@ -47,7 +46,9 @@
 		"@js-temporal/polyfill": "^0.4.4",
 		"@libsql/client": "^0.14.0",
 		"@sveltejs/adapter-vercel": "^5.7.0",
+		"@tailwindcss/typography": "^0.5.16",
 		"dotenv": "^16.5.0",
-		"drizzle-orm": "^0.40.1"
+		"drizzle-orm": "^0.40.1",
+		"mdsvex": "^0.12.3"
 	}
 }
