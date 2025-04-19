@@ -197,5 +197,9 @@
 			@apply font-bold;
 			content: attr(data-label);
 		}
+		.main_div {
+		@apply  px-1;
+
+	}
 	}
 </style>
