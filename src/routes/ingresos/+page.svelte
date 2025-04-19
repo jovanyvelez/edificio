@@ -1,184 +1,9 @@
-<!--
 <script lang="ts">
-	import { Temporal } from '@js-temporal/polyfill';
-
-	const fechaActual = Temporal.Now.plainDateISO();
-
-	const oldDate = Temporal.PlainDate.from('2024-02-01');
-
-	const diferencia = oldDate.until(fechaActual, { largestUnit: 'months' }).months;
-	//const mesesDiferencia = diferencia.months;
-
-
-	const fechaHoraActual = Temporal.Now.plainDateTimeISO();
-
-	const yearMonth = Temporal.PlainYearMonth.from({ year: 2025, month: 10 }); // => 2020-10
-
-	const miFecha = yearMonth.toString() + '-' + yearMonth.daysInMonth.toString();
-
-	const fecha1 = Temporal.PlainDate.from('2025-02-01');
-	const fecha2 = Temporal.PlainDate.from('2026-01-31');
-	const fecha3 = Temporal.PlainDate.from(miFecha);
-
-	const estaEnRango = (
-		fecha: Temporal.PlainDate,
-		inicio: Temporal.PlainDate,
-		fin: Temporal.PlainDate
-	): boolean => {
-		// ¿La fecha es igual o posterior a inicio? (diferencia no negativa)
-		const desdeInicio = fecha.since(inicio).sign;
-		// ¿La fecha es igual o anterior a fin? (diferencia no negativa)
-		const hastaFin = fecha.until(fin).sign;
-
-		return desdeInicio >= 0 && hastaFin >= 0;
-	};
-
-	const answ = estaEnRango(fecha3, fecha1, fecha2); // => true
-
-	/*    console.log('Transacción registrada:', inserted[0].id);
-    console.log(fechaActual);
-
-    const horaActual = Temporal.Now.plainTimeISO();
-
-    console.log(horaActual);
-
-
-    console.log(fechaHoraActual); */
-</script>
-
-<main>
-	<p>{fechaActual.toString()}</p>
-	<p>{fechaHoraActual.toString()}</p>
-	<p>{yearMonth.toString()}</p>
-	<p>{miFecha}</p>
-	<p>{diferencia}</p>
-</main>
--->
-
-
-
-
-<script lang="ts">
-
-
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 
-	const { paymentsData} = data;
-
-	const paymentsData1 = [
-		{
-			apartamento: '9801',
-			total: 232000,
-			abono_cuotas: 230902,
-			interes: 1098
-		},
-		{
-			apartamento: '9802',
-			total: 312000,
-			abono_cuotas: 312000,
-			interes: 0
-		},
-		{ apartamento: '9901', total: 0, abono_cuotas: 0, interes: 0 },
-		{
-			apartamento: '9902',
-			total: 232000,
-			abono_cuotas: 232000,
-			interes: 0
-		},
-		{
-			apartamento: '9903',
-			total: 232000,
-			abono_cuotas: 232000,
-			interes: 0
-		},
-		{
-			apartamento: '101',
-			total: 312000,
-			abono_cuotas: 312000,
-			interes: 0
-		},
-		{ apartamento: '102', total: 0, abono_cuotas: 0, interes: 0 },
-		{
-			apartamento: '103',
-			total: 480000,
-			abono_cuotas: 480000,
-			interes: 0
-		},
-		{
-			apartamento: '201',
-			total: 312000,
-			abono_cuotas: 312000,
-			interes: 0
-		},
-		{
-			apartamento: '202',
-			total: 432000,
-			abono_cuotas: 432000,
-			interes: 0
-		},
-		{
-			apartamento: '203',
-			total: 232900,
-			abono_cuotas: 230875,
-			interes: 2025
-		},
-		{
-			apartamento: '301',
-			total: 312000,
-			abono_cuotas: 312000,
-			interes: 0
-		},
-		{
-			apartamento: '302',
-			total: 304000,
-			abono_cuotas: 299823,
-			interes: 4177
-		},
-		{
-			apartamento: '303',
-			total: 120000,
-			abono_cuotas: 110119,
-			interes: 9881
-		},
-		{
-			apartamento: '401',
-			total: 234000,
-			abono_cuotas: 231001,
-			interes: 2999
-		},
-		{
-			apartamento: '402',
-			total: 615000,
-			abono_cuotas: 542947,
-			interes: 72053
-		},
-		{
-			apartamento: '403',
-			total: 312000,
-			abono_cuotas: 312000,
-			interes: 0
-		},
-		{
-			apartamento: '501',
-			total: 232000,
-			abono_cuotas: 230902,
-			interes: 1098
-		},
-		{
-			apartamento: '502',
-			total: 312000,
-			abono_cuotas: 312000,
-			interes: 0
-		},
-		{
-			apartamento: '503',
-			total: 233142,
-			abono_cuotas: 232216,
-			interes: 926
-		}
-	];
+	const { paymentsData } = data;
 
 	// Estado para controlar el ordenamiento
 	let sortField: keyof (typeof paymentsData)[0] = $state('apartamento');
@@ -216,7 +41,7 @@
 	}
 </script>
 
-<div class="container mx-auto px-4 py-8">
+<div class="main_div container mx-auto px-4 py-8">
 	<h1 class="mb-6 text-center text-2xl font-bold">Pagos por Apartamento</h1>
 
 	<div class="overflow-x-auto rounded-lg shadow-md">
@@ -239,9 +64,9 @@
 			</thead>
 			<tbody>
 				{#each paymentsData as row (row.apartamento)}
-					<tr 
-						class="border-b hover:bg-gray-50" 
-						class:bg-red-100={row.abono_cuotas === 0} 
+					<tr
+						class="border-b hover:bg-gray-50"
+						class:bg-red-100={row.abono_cuotas === 0}
 						class:row-zero-payment={row.abono_cuotas === 0}
 					>
 						<td class="t1" data-label="Apartamento">
@@ -256,10 +81,7 @@
 							<span class="noshow">Abono:</span>
 							<span>{formatCurrency(row.abono_cuotas)}</span>
 						</td>
-						<td
-							class="td2"
-							data-label="Interés"
-						>
+						<td class="td2" data-label="Interés">
 							<span class="noshow">Interés:</span>
 							<span>{formatCurrency(row.interes)}</span>
 						</td>
@@ -315,15 +137,19 @@
 	}
 
 	.th1 {
-		@apply flex justify-end items-center;
+		@apply flex items-center justify-end;
 	}
 
 	.th2 {
-		@apply flex justify-start items-center;
+		@apply flex items-center justify-start;
 	}
 
 	.t1 {
 		@apply px-4 py-3 text-left;
+	}
+	.main_div {
+		@apply  px-44;
+
 	}
 
 	/* Estilos responsive */
